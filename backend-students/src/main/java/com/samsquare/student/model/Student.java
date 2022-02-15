@@ -24,7 +24,17 @@ public class Student {
 	public Student() {
 		
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Student{" +
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", emailId='" + emailId + '\'' +
+				'}';
+	}
+
 	public Student(long id, String firstName, String lastName, String emailId) {
 		super();
 		this.id = id;
