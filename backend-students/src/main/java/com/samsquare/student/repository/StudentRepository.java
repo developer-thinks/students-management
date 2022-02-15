@@ -13,5 +13,8 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-
+//    @Transactional
+//    public <S extends Student> List<Student> saveAll(Iterable<S> entities) {
+//
+//    }
 }
