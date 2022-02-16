@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
+  const [update,setUpdate]= useState([]);
 
   useEffect(()=>{
     initializeStudentList()
+
   }, [])
 
   const initializeStudentList = ()=>{
@@ -45,7 +47,9 @@ const StudentList = () => {
                 <td>{student.lastName}</td>
                 <td>{student.emailId }</td>
                 <td>
-                  <Link className="btn btn-info" to={`/students/update/${student.id}`}>Update</Link>
+                  <button setUpdate={setUpdate}>
+                    <Link className="btn btn-info" to={`/students/update/${student.id}`}>Update</Link>
+                  </button>
                   <button className="btn btn-danger ml-4" onClick={() => {
                     handleDelete(student.id);
                   }}>Delete</button>
