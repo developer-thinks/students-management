@@ -1,21 +1,32 @@
 import { useEffect, useState } from "react"
 import Axios from 'axios'
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
-  const [update,setUpdate]= useState([]);
+  // const [update,setUpdate]= useState([]);
 
-  useEffect(()=>{
+  const nevigate = useNavigate();
+ const location = useLocation();
+
+  useEffect( ()=>{
     initializeStudentList()
+    console.log(location.state);
 
+
+
+    // console.log(location.state.update);
+    // setStudents(location.state.update);
+    // students.push(location.state.newStudent)
   }, [])
 
-  const initializeStudentList = ()=>{
-    Axios.get('http://localhost:8080/api/v1/students').then(response=>{
-      setStudents(response.data);
-    })
-    .catch(error=> console.log(error));
+  const initializeStudentList = async ()=>{
+    // Axios.get('http://localhost:8080/api/v1/students').then(response=>{
+    //   console.log(response.data);
+    //   setStudents(response.data);
+    // })
+    // .catch(error=> console.log(error));
+    await setStudents(location.state.update)
   }
 
   const handleDelete =(id)=>{
@@ -26,11 +37,29 @@ const StudentList = () => {
         })
     }
 
+  const handleAddStudent = ()=>{
+      nevigate('/add', 
+      // {
+      //   state :{
+      //     students
+      //   }
+      // }
+      )
+  }
+
   return (
     <div className="container">
       <h3>list of students</h3>
       <div>
-          <Link to="/add" className="btn btn-primary mb-2"> Add student</Link>
+          {/* <Link className="btn btn-primary mb-2" to={{
+                    pathname :'/add',
+                    data : {
+                      updateStudents : students
+                    }
+                  }}>Add student</Link> */}
+        <button onClick={handleAddStudent}>
+          Add student
+        </button>
         <table className="table table-bordered table-striped" >
           <thead className="thead-dark">
             <tr>
@@ -47,9 +76,7 @@ const StudentList = () => {
                 <td>{student.lastName}</td>
                 <td>{student.emailId }</td>
                 <td>
-                  <button setUpdate={setUpdate}>
-                    <Link className="btn btn-info" to={`/students/update/${student.id}`}>Update</Link>
-                  </button>
+                  <Link className="btn btn-info" to={`/students/update/${student.id}`}>Update</Link>
                   <button className="btn btn-danger ml-4" onClick={() => {
                     handleDelete(student.id);
                   }}>Delete</button>

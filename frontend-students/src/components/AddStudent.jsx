@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import Axios from 'axios'
-import M from 'materialize-css'
 
-const AddStudent = ({setUpdate}) => {
-
+const AddStudent = (props) => {
+    // console.log(this.props.location.state);
     const[firstName, setFirstName] = useState('');
     const[lastName, setLastName] = useState('');
     const[emailId, setEmailId] = useState('');
+
+    const [update, setUpdate] = useState([]);
+
     const {id} = useParams()
     const nevigate = useNavigate()
+    const location = useLocation();
+    // console.log(location.state);
 
     useEffect(()=>{
         if(id){
         Axios.get(`http://localhost:8080/api/v1/students/${id}`)
         .then(response=>{
-            setUpdate(response.data.firstName)
+            setFirstName(response.data.firstName)
             setLastName(response.data.lastName)
             setEmailId(response.data.emailId)
         }).catch(err=>{
@@ -24,26 +28,38 @@ const AddStudent = ({setUpdate}) => {
     }
     },[])
 
-    const saveStudent = (e)=>{
+    const saveStudent = async (e)=>{
         e.preventDefault()
-        const students = {firstName,lastName,emailId, id}
-        if(id){
-            Axios.put('http://localhost:8080/api/v1/students', [students])
-            .then(response =>{
-                console.log(response.data);
-                M.toast({html: "saved successfully", classes:"#43a047 green darken-1"})
-                nevigate('/')
-            })
-        } else{
-            Axios.post('http://localhost:8080/api/v1/students', [students])
-            .then(response=>{
-            console.log(response.data);
-            M.toast({html: "saved successful", classes:"#43a047 green darken-1"})
-            nevigate('/')
-            }).catch(err=>{
-            console.log(err);
+        // const newStudent = {firstName,lastName,emailId, id}
+        const newStudent = {firstName,lastName,emailId}
+        // if(id){
+        //     Axios.put('http://localhost:8080/api/v1/students', [newStudent])
+        //     .then(response =>{
+        //         console.log(response.data);
+                
+        //         nevigate('/')
+        //     })
+        // } else{
+        //     Axios.post('http://localhost:8080/api/v1/students', [newStudent])
+        //     .then(response=>{
+        //     console.log(response.data);
+        //     nevigate('/')
+        //     }).catch(err=>{
+        //     console.log(err);
+        // })
+        // }
+        
+        // location.state.students.push(newStudent);
+        // console.log(location.state);
+        // setUpdate(location.state);
+        // await setUpdate(newStudent);
+        update.push(newStudent);
+        nevigate('/',{
+            state :{
+                update
+            }
         })
-        }
+
     }
 
 
