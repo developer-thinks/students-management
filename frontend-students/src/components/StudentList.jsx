@@ -39,11 +39,11 @@ const StudentList = () => {
 
   const handleAddStudent = ()=>{
       nevigate('/add', 
-      // {
-      //   state :{
-      //     students
-      //   }
-      // }
+      {
+        state :{
+          students
+        }
+      }
       )
   }
 

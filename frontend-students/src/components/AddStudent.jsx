@@ -13,7 +13,7 @@ const AddStudent = (props) => {
     const {id} = useParams()
     const nevigate = useNavigate()
     const location = useLocation();
-    // console.log(location.state);
+    // console.log(location.state.students);
 
     useEffect(()=>{
         if(id){
@@ -51,8 +51,12 @@ const AddStudent = (props) => {
         
         // location.state.students.push(newStudent);
         // console.log(location.state);
-        // setUpdate(location.state);
+        // await setUpdate(location.state.students);
         // await setUpdate(newStudent);
+        // await setUpdate(...location.state.students, newStudent)
+        for(let i=0;i<location.state.students.length;i++){
+            update.push(location.state.students[i]);
+        }
         update.push(newStudent);
         nevigate('/',{
             state :{
