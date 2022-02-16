@@ -1,7 +1,9 @@
 package com.samsquare.student.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.samsquare.student.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ public class StudentController {
 	
 	@Autowired
 	private StudentRepository studentRepository;
-	
+
 	//get all employees API :
 	@GetMapping("/students")
 	public List<Student> getAllStudents(){
@@ -26,8 +28,8 @@ public class StudentController {
 	
 	//create student API :
 	@PostMapping("/students")
-	public Student createStudent(@RequestBody Student student) {
-		return studentRepository.save(student);
+	public List<Student> createStudent(@RequestBody List<Student> students) {
+		 return studentRepository.saveAll(students);
 	}
 
 	@GetMapping("/students/{id}")
@@ -36,8 +38,16 @@ public class StudentController {
 	}
 
 	@PutMapping("/students")
-	public Student updateStudentDetails(@RequestBody Student student){
-		return studentRepository.save(student);
+	public void updateStudentDetails(@RequestBody List<Student> students){
+		List<Student> temp = new ArrayList<>();
+		for(Student student : students){
+			Student updateStudent = studentRepository.findById(student.getId()).orElseThrow(() -> new ResourceNotFoundException("not found"+student.getId()));
+			updateStudent.setFirstName(student.getFirstName());
+			updateStudent.setLastName(student.getLastName());
+			updateStudent.setEmailId(student.getEmailId());
+			temp.add(updateStudent);
+		}
+		 studentRepository.saveAll(temp);
 	}
 
 	@DeleteMapping("/students/{id}")
